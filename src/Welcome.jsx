@@ -48,7 +48,7 @@ function Welcome() {
           />
         </div>
         <TypingText
-          text="I'm Isaiah - a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative finance. As I continue learning, this site will be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"
+          text="I'm Isaiah, a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative trading. As I continue learning, this site will eventually... be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"
           delay={25}
         />
       </section>
