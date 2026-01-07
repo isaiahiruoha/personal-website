@@ -14,7 +14,7 @@ function Project() {
             data-aos-offset="250"
             data-aos-duration="500">
             <section className="projects-section">
-                <h2 className="projects-section-header" id="projects">Past & Present Work</h2>
+                <h2 className="projects-section-header" id="projects">Projects</h2>
                 <div className="projects-grid">
                     <a
                         href="https://isaiahiruoha.github.io/arbitrage/#/"
