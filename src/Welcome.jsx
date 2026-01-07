@@ -38,14 +38,18 @@ function Welcome() {
       <section className="welcome-section">
         <h1 id="welcome-section">Isaiah Iruoha</h1>
         <p id="sentence">Computer Engineering Student at Queen's University</p>
-        <div className="image-wrapper">
-          {!imageLoaded && <LoadingSpinner />}
-          <img 
-            src={process.env.PUBLIC_URL + '/assets/profile.png'} 
-            alt="about" 
-            style={{ display: imageLoaded ? 'block' : 'none' }}
-            onLoad={() => setImageLoaded(true)}
-          />
+        <div className="blob-container">
+          <div className="blob-wrapper">
+            {!imageLoaded && <LoadingSpinner />}
+            <img 
+              src={process.env.PUBLIC_URL + '/assets/profile.png'} 
+              alt="about" 
+              className="blob-image"
+              style={{ opacity: imageLoaded ? 1 : 0 }}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </div>
+          <div className="blob-shadow"></div>
         </div>
         <TypingText
           text="I'm Isaiah, a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative trading. As I continue learning, this site will eventually... be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"

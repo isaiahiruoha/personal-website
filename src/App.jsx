@@ -1,40 +1,85 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS CSS file
+import Lenis from 'lenis';
+import 'lenis/dist/lenis.css';
+import ReactGA from 'react-ga4';
 import Experience from './Experience';
 import Nav from './Nav';
 import Welcome from './Welcome';
 import Project from './Project';
 import Contact from './Contact';
+import CustomCursor from './components/CustomCursor';
+
+// Initialize Google Analytics
+ReactGA.initialize('G-2YLYZ2F5T2');
 
 function App() {
+  const lenisRef = useRef(null);
 
+  // Track page view on mount
+  useEffect(() => {
+    ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
+  }, []);
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,           // Scroll duration (higher = smoother but slower)
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
+      orientation: 'vertical', // Scroll direction
+      gestureOrientation: 'vertical',
+      smoothWheel: true,       // Enable smooth wheel scrolling
+      wheelMultiplier: 1,      // Wheel scroll speed
+      touchMultiplier: 2,      // Touch scroll speed
+      infinite: false,         // Infinite scroll
+    });
+
+    lenisRef.current = lenis;
+
+    // Animation loop
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    // Connect Lenis to AOS scroll events
+    lenis.on('scroll', () => {
+      AOS.refresh();
+    });
+
+    // Cleanup on unmount
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  // Initialize AOS
   useEffect(() => {
     AOS.init({
-      // Global settings:
-      disable: false, // accepts following values: 'phone', 'tablet', 'mobile', boolean, expression or function
-      startEvent: 'DOMContentLoaded', // name of the event dispatched on the document, that AOS should initialize on
-      initClassName: 'aos-init', // class applied after initialization
-      animatedClassName: 'aos-animate', // class applied on animation
-      useClassNames: false, // if true, will add content of `data-aos` as classes on scroll
-      disableMutationObserver: false, // disables automatic mutations' detections (advanced)
-      debounceDelay: 50, // the delay on debounce used while resizing window (advanced)
-      throttleDelay: 99, // the delay on throttle used while scrolling the page (advanced)
-
-      // Settings that can be overridden on per-element basis, by `data-aos-*` attributes:
-      offset: 120, // offset (in px) from the original trigger point
-      delay: 0, // values from 0 to 3000, with step 50ms
-      duration: 400, // values from 0 to 3000, with step 50ms
-      easing: 'ease', // default easing for AOS animations
-      once: false, // whether animation should happen only once - while scrolling down
-      mirror: false, // whether elements should animate out while scrolling past them
-      anchorPlacement: 'top-bottom', // defines which position of the element regarding to window should trigger the animation
+      disable: false,
+      startEvent: 'DOMContentLoaded',
+      initClassName: 'aos-init',
+      animatedClassName: 'aos-animate',
+      useClassNames: false,
+      disableMutationObserver: false,
+      debounceDelay: 50,
+      throttleDelay: 99,
+      offset: 120,
+      delay: 0,
+      duration: 400,
+      easing: 'ease',
+      once: false,
+      mirror: false,
+      anchorPlacement: 'top-bottom',
     });
-  }, []); // Run only once after component mount
+  }, []);
 
   return (
     <>
+      <CustomCursor />
       <Nav />
       <Welcome />
       <Experience />

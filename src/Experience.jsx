@@ -176,7 +176,7 @@ function Experience() {
 
   return (
     <div data-aos="fade-left" data-aos-offset="250" data-aos-duration="500">
-      <section className="experience-section" id="skills">
+      <section className="experience-section" id="experience">
         <h2 className="experience-header">Experience</h2>
         
         {/* Tab Navigation */}
