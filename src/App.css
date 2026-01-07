@@ -209,7 +209,8 @@ li {
   align-items: center;
   width: 100%;
   height: auto;
-  margin-top: 20rem;
+  padding-top: clamp(10rem, 15vh, 14rem);
+  padding-bottom: clamp(4rem, 8vh, 8rem);
   background-color: var(--bg-primary);
 }
 
@@ -220,8 +221,6 @@ li {
   max-height: 450px;
   margin-top: 10vh; 
   margin-bottom: 5vh; 
-  position: relative; 
-  top: -5vh; 
   transition: transform 1s ease-in-out; 
 }
 
@@ -234,9 +233,6 @@ transform: scale(1.1);
     width: 90%;
     text-align: center;
   }
-  .welcome-section {
-    margin-top: 15rem; 
-  }
   .welcome-section h1 {
     margin-bottom: 2rem; 
   }
@@ -247,11 +243,6 @@ transform: scale(1.1);
   font-weight: 200;
   font-style: italic;
   color: var(--text-primary);
-}
-
-.welcome-section > #sentence, h1 {
- position: relative; 
- top: -2vh;  
 }
 
 #blurb {
@@ -276,7 +267,8 @@ transform: scale(1.1);
   width: 100%;
   background-color: var(--bg-primary);
   position: relative;
-  margin-top: 20rem;
+  padding-top: clamp(6rem, 10vh, 10rem);
+  padding-bottom: clamp(6rem, 10vh, 10rem);
   min-height: fit-content;
   overflow: visible !important;
 }
@@ -413,16 +405,9 @@ height: 50px;
 
 .projects-section {
   text-align: center;
-  padding: 10rem 2rem;
+  padding: clamp(6rem, 10vh, 10rem) 2rem;
   background: var(--bg-primary);
-  position: relative; 
-  margin-top: 20rem;
-}
-
-@media only screen and (max-width: 767px) {
-  .projects-section {
-    margin-top: 20rem;
-  }
+  position: relative;
 }
 
 .projects-section-header {
@@ -555,16 +540,8 @@ height: 50px;
   align-items: center;
   text-align: center;
   width: 100%;
-  height: 12vh;
-  padding: 0 2rem;
+  padding: clamp(6rem, 10vh, 10rem) 2rem;
   background: var(--bg-primary);
-}
-
-@media only screen and (max-width: 767px) {
-  .contact-section {
-    margin-top: 5rem;
-    margin-bottom: 75px; 
-  }
 }
 
 .contact-links {
@@ -574,8 +551,6 @@ height: 50px;
   max-width: 980px;
   margin-top: 4rem;
   flex-wrap: wrap;
-  position: relative; 
-  top: -8vh; 
 }
 
 .contact-details {
@@ -724,9 +699,327 @@ background-color: var(--main-offwhite);
   box-sizing: border-box;
 }
 
-/* Ensure all child elements can't cause scroll */
-.skills-section *,
-.skills-section *::before,
-.skills-section *::after {
-  overflow: visible !important;
+/* ==================== */
+/* EXPERIENCE SECTION   */
+/* ==================== */
+
+.experience-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(6rem, 10vh, 10rem) 2rem;
+  background-color: var(--bg-primary);
+}
+
+.experience-header {
+  font-size: clamp(3rem, 5vw, 4.2rem);
+  color: var(--text-primary);
+  padding: 1.5rem 3rem;
+  background-color: var(--project-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  margin-bottom: 5rem;
+  text-align: center;
+  animation: headerAnimation 2s ease-in-out infinite;
+}
+
+/* Tab Navigation */
+.tab-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tab-button {
+  padding: 1.2rem 2.4rem;
+  font-size: 1.8rem;
+  font-family: inherit;
+  border: 2px solid var(--text-primary);
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  transform: translateY(-2px);
+}
+
+.tab-button.active {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  box-shadow: 0 4px 15px var(--card-shadow);
+}
+
+/* Tab Content */
+.tab-content {
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Timeline Styles */
+.timeline {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--text-primary), transparent);
+  border-radius: 3px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 3rem;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -3rem;
+  top: 0.5rem;
+  width: 16px;
+  height: 16px;
+  background: var(--bg-primary);
+  border: 3px solid var(--text-primary);
+  border-radius: 50%;
+  transform: translateX(-6.5px);
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-marker {
+  background: var(--text-primary);
+  transform: translateX(-6.5px) scale(1.2);
+}
+
+.timeline-content {
+  background: var(--project-bg);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.timeline-item:hover .timeline-content {
+  transform: translateX(10px);
+  box-shadow: 0 6px 25px var(--card-shadow);
+}
+
+.timeline-top {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.company-logo {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: white;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  flex: 1;
+}
+
+.timeline-role {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.timeline-type {
+  font-size: 1.2rem;
+  padding: 0.4rem 1rem;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.timeline-company {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  opacity: 0.8;
+  margin: 0.5rem 0;
+}
+
+.timeline-meta {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.timeline-date,
+.timeline-location {
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  opacity: 0.7;
+}
+
+.timeline-date::before {
+  content: '📅 ';
+}
+
+.timeline-location::before {
+  content: '📍 ';
+}
+
+.timeline-description {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  opacity: 0.85;
+  margin-top: 1rem;
+  line-height: 1.6;
+}
+
+.timeline-specialization {
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--text-primary);
+  opacity: 0.8;
+  margin: 0.5rem 0;
+}
+
+.timeline-grade {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  padding: 0.3rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--text-primary);
+}
+
+/* Volunteering Grid */
+.volunteering-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding-left: 0;
+}
+
+.volunteering-grid::before {
+  display: none;
+}
+
+.volunteering-card {
+  background: var(--project-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px var(--card-shadow);
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.5s ease forwards;
+  opacity: 0;
+  text-align: center;
+}
+
+.volunteering-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 30px var(--card-shadow);
+}
+
+.volunteering-role {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.volunteering-org {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  opacity: 0.8;
+  margin: 0 0 1rem 0;
+}
+
+.volunteering-date {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  opacity: 0.6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .tab-container {
+    gap: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 1rem 1.8rem;
+    font-size: 1.5rem;
+  }
+  
+  .timeline {
+    padding-left: 2rem;
+  }
+  
+  .timeline-marker {
+    left: -2rem;
+  }
+  
+  .timeline-content {
+    padding: 1.5rem;
+  }
+  
+  .company-logo {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .timeline-top {
+    gap: 1rem;
+  }
+  
+  .timeline-role {
+    font-size: 1.7rem;
+  }
+  
+  .timeline-header {
+    flex-direction: column;
+  }
+  
+  .volunteering-grid {
+    grid-template-columns: 1fr;
+  }
 }

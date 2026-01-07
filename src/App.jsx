@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; // Import AOS CSS file
-import Skills from './Skills';
+import Experience from './Experience';
 import Nav from './Nav';
 import Welcome from './Welcome';
 import Project from './Project';
@@ -37,7 +37,7 @@ function App() {
     <>
       <Nav />
       <Welcome />
-      <Skills />
+      <Experience />
       <Project  />
       <Contact />
     </>
