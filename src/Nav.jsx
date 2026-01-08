@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ThemeToggle from './components/ThemeToggle';
+import PacmanTransition from './components/PacmanTransition';
 
 function Nav() {
   const [isHidden, setIsHidden] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [pacmanActive, setPacmanActive] = useState(false);
 
-  // Hide/Show nav on scroll
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
-      // Only hide after scrolling past 100px
       if (currentScrollY > 100) {
-        // Scrolling down - hide nav
         if (currentScrollY > lastScrollY && currentScrollY > 150) {
           setIsHidden(true);
-        } 
-        // Scrolling up - show nav
-        else if (currentScrollY < lastScrollY) {
+        } else if (currentScrollY < lastScrollY) {
           setIsHidden(false);
         }
       } else {
@@ -33,13 +30,12 @@ function Nav() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Active section detection
   useEffect(() => {
     const sections = ['welcome-section', 'experience', 'projects', 'contact'];
     
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -60% 0px', // Trigger when section is in upper-middle of viewport
+      rootMargin: '-20% 0px -60% 0px',
       threshold: 0,
     };
 
@@ -79,12 +75,28 @@ function Nav() {
 
   const scrollToTop = (e) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (pacmanActive) return;
+    setPacmanActive(true);
+  };
+  
+  const handlePacmanComplete = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.dispatchEvent(new CustomEvent('resetTypingText'));
+    setTimeout(() => {
+      setPacmanActive(false);
+    }, 1000);
   };
 
   return (
-    <nav id="navbar" className={`nav ${isHidden ? 'nav-hidden' : ''}`}>
-      <a id="logo" href="/" onClick={scrollToTop}>II</a>
+    <>
+      <PacmanTransition isActive={pacmanActive} onComplete={handlePacmanComplete} />
+      
+      <nav id="navbar" className={`nav ${isHidden ? 'nav-hidden' : ''}`}>
+        <a id="logo" href="/" onClick={scrollToTop}>
+          <span className="logo-bracket logo-bracket-left">&lt;</span>
+          <span className="logo-text">II</span>
+          <span className="logo-bracket logo-bracket-right">/&gt;</span>
+        </a>
       <ul className="nav-list">
         <li className="nav-item">
           <a 
@@ -130,7 +142,8 @@ function Nav() {
           <ThemeToggle />
         </li>
       </ul>
-    </nav>
+      </nav>
+    </>
   );
 }
 

@@ -17,9 +17,9 @@ function sendToAnalytics({ id, name, value }) {
   ReactGA.event({
     category: 'Web Vitals',
     action: name,
-    value: Math.round(name === 'CLS' ? value * 1000 : value), // values must be integers
-    label: id, // id unique to current page load
-    nonInteraction: true, // avoids affecting bounce rate
+    value: Math.round(name === 'CLS' ? value * 1000 : value),
+    label: id,
+    nonInteraction: true,
   });
 }
 

@@ -3,6 +3,38 @@ import React, { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+const getInitials = (company) => {
+  const specialCases = {
+    'Amazon Web Services': 'AWS',
+    'RBC Capital Markets': 'RBC',
+    "Queen's University": 'QU',
+    'Linamar Corporation': 'LIN',
+  };
+  if (specialCases[company]) return specialCases[company];
+  return company.split(' ').map(w => w[0]).slice(0, 3).join('').toUpperCase();
+};
+
+function CompanyLogo({ company, logoUrl }) {
+  const [imgError, setImgError] = useState(false);
+  
+  if (imgError || !logoUrl) {
+    return (
+      <div className="company-initials">
+        {getInitials(company)}
+      </div>
+    );
+  }
+  
+  return (
+    <img 
+      src={process.env.PUBLIC_URL + logoUrl} 
+      alt={`${company} logo`}
+      className="company-logo"
+      onError={() => setImgError(true)}
+    />
+  );
+}
+
 function Experience() {
   const [activeTab, setActiveTab] = useState('work');
   
@@ -19,17 +51,17 @@ function Experience() {
       date: 'Aug 2025 - Present',
       location: 'Toronto, ON',
       description: 'Global Markets Electronic Trading',
-      logo: 'https://logo.clearbit.com/rbc.com'
+      logo: '/assets/logos/rbc.png'
     },
     {
       id: 2,
       role: 'Software Development Engineer (AI/ML)',
-      company: 'Amazon Web Services (AWS)',
+      company: 'Amazon Web Services',
       type: 'Internship',
       date: 'May 2025 - Aug 2025',
       location: 'Vancouver, BC',
       description: 'Open-Source Managed Apache Airflow',
-      logo: 'https://logo.clearbit.com/aws.amazon.com'
+      logo: '/assets/logos/aws.png'
     },
     {
       id: 3,
@@ -39,7 +71,7 @@ function Experience() {
       date: 'Jun 2024 - Sep 2024',
       location: 'Toronto, ON',
       description: 'Rotational Exposure – Equity & Credit Derivatives, FX, Diversified and P&U',
-      logo: 'https://logo.clearbit.com/scotiabank.com'
+      logo: '/assets/logos/scotiabank.svg'
     },
     {
       id: 4,
@@ -49,7 +81,7 @@ function Experience() {
       date: 'Apr 2024 - May 2024',
       location: 'Toronto, ON',
       description: 'Production Observability & Metrics',
-      logo: 'https://logo.clearbit.com/guestlogix.com'
+      logo: '/assets/logos/guestlogix.png'
     },
     {
       id: 5,
@@ -59,7 +91,7 @@ function Experience() {
       date: 'Aug 2023 - Dec 2023',
       location: 'Kingston, ON',
       description: 'Computer Programming in C',
-      logo: 'https://logo.clearbit.com/queensu.ca'
+      logo: '/assets/logos/queens.svg'
     },
     {
       id: 6,
@@ -69,7 +101,7 @@ function Experience() {
       date: 'May 2023 - Aug 2023',
       location: 'Guelph, ON',
       description: 'Robot Monitoring & Automation',
-      logo: 'https://logo.clearbit.com/linamar.com'
+      logo: '/assets/logos/linamar.png'
     },
     {
       id: 7,
@@ -79,7 +111,7 @@ function Experience() {
       date: 'Jul 2022 - Aug 2022',
       location: 'Guelph, ON',
       description: 'Conveyor Simulation & Robotics Maintenance',
-      logo: 'https://logo.clearbit.com/linamar.com'
+      logo: '/assets/logos/linamar.png'
     }
   ];
 
@@ -179,7 +211,6 @@ function Experience() {
       <section className="experience-section" id="experience">
         <h2 className="experience-header">Experience</h2>
         
-        {/* Tab Navigation */}
         <div className="tab-container">
           <button 
             className={`tab-button ${activeTab === 'work' ? 'active' : ''}`}
@@ -201,9 +232,7 @@ function Experience() {
           </button>
         </div>
 
-        {/* Tab Content */}
         <div className="tab-content">
-          {/* Work Experience */}
           {activeTab === 'work' && (
             <div className="timeline">
               {workExperience.map((job, index) => (
@@ -214,21 +243,14 @@ function Experience() {
                 >
                   <div className="timeline-marker"></div>
                   <div className="timeline-content">
-                    <div className="timeline-top">
-                      <img 
-                        src={job.logo} 
-                        alt={`${job.company} logo`}
-                        className="company-logo"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                      <div className="timeline-header">
-                        <h3 className="timeline-role">{job.role}</h3>
-                        <span className="timeline-type">{job.type}</span>
-                      </div>
+                    <div className="timeline-header">
+                      <h3 className="timeline-role">{job.role}</h3>
+                      <span className="timeline-type">{job.type}</span>
                     </div>
-                    <h4 className="timeline-company">{job.company}</h4>
+                    <div className="timeline-company-row">
+                      <h4 className="timeline-company">{job.company}</h4>
+                      <CompanyLogo company={job.company} logoUrl={job.logo} />
+                    </div>
                     <div className="timeline-meta">
                       <span className="timeline-date">{job.date}</span>
                       <span className="timeline-location">{job.location}</span>
@@ -240,7 +262,6 @@ function Experience() {
             </div>
           )}
 
-          {/* Education */}
           {activeTab === 'education' && (
             <div className="timeline">
               {education.map((edu, index) => (
@@ -269,7 +290,6 @@ function Experience() {
             </div>
           )}
 
-          {/* Volunteering */}
           {activeTab === 'volunteering' && (
             <div className="timeline volunteering-grid">
               {volunteering.map((vol, index) => (

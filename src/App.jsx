@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './App.css';
 import AOS from 'aos';
-import 'aos/dist/aos.css'; // Import AOS CSS file
+import 'aos/dist/aos.css';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import ReactGA from 'react-ga4';
@@ -12,51 +12,44 @@ import Project from './Project';
 import Contact from './Contact';
 import CustomCursor from './components/CustomCursor';
 
-// Initialize Google Analytics
 ReactGA.initialize('G-2YLYZ2F5T2');
 
 function App() {
   const lenisRef = useRef(null);
 
-  // Track page view on mount
   useEffect(() => {
     ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
   }, []);
 
-  // Initialize Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,           // Scroll duration (higher = smoother but slower)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Easing function
-      orientation: 'vertical', // Scroll direction
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
       gestureOrientation: 'vertical',
-      smoothWheel: true,       // Enable smooth wheel scrolling
-      wheelMultiplier: 1,      // Wheel scroll speed
-      touchMultiplier: 2,      // Touch scroll speed
-      infinite: false,         // Infinite scroll
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+      infinite: false,
     });
 
     lenisRef.current = lenis;
 
-    // Animation loop
     function raf(time) {
       lenis.raf(time);
       requestAnimationFrame(raf);
     }
     requestAnimationFrame(raf);
 
-    // Connect Lenis to AOS scroll events
     lenis.on('scroll', () => {
       AOS.refresh();
     });
 
-    // Cleanup on unmount
     return () => {
       lenis.destroy();
     };
   }, []);
 
-  // Initialize AOS
   useEffect(() => {
     AOS.init({
       disable: false,

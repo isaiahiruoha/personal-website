@@ -8,7 +8,6 @@ function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    // Check if it's a touch device
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouchDevice) return;
 
@@ -24,7 +23,6 @@ function CustomCursor() {
       mouseX = e.clientX;
       mouseY = e.clientY;
       
-      // Dot follows instantly (no lerp) for low latency
       if (dot) {
         dot.style.left = `${mouseX}px`;
         dot.style.top = `${mouseY}px`;
@@ -41,10 +39,8 @@ function CustomCursor() {
       setIsVisible(true);
     };
 
-    // Animation loop for the main cursor effect (smooth following)
     let animationId;
     const animate = () => {
-      // Main cursor follows with smooth lerp
       cursorX += (mouseX - cursorX) * 0.1;
       cursorY += (mouseY - cursorY) * 0.1;
 
@@ -56,7 +52,6 @@ function CustomCursor() {
       animationId = requestAnimationFrame(animate);
     };
 
-    // Detect hoverable elements
     const addHoverListeners = () => {
       const hoverables = document.querySelectorAll(
         'a, button, .project, .tab-button, .contact-details, .btn-resume, .theme-toggle, .blob-wrapper'
@@ -74,7 +69,6 @@ function CustomCursor() {
     
     animate();
     
-    // Set up hover detection after DOM is ready
     const timeoutId = setTimeout(addHoverListeners, 100);
 
     return () => {
@@ -88,12 +82,10 @@ function CustomCursor() {
 
   return (
     <>
-      {/* Main cursor effect - the flashlight/shadow */}
       <div
         ref={cursorRef}
         className={`custom-cursor ${isVisible ? 'visible' : ''} ${isHovering ? 'hovering' : ''}`}
       />
-      {/* Dot cursor - follows instantly */}
       <div
         ref={dotRef}
         className={`cursor-dot ${isVisible ? 'visible' : ''} ${isHovering ? 'hovering' : ''}`}

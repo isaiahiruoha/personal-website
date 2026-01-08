@@ -5,7 +5,21 @@ import 'aos/dist/aos.css';
 import VanillaTilt from 'vanilla-tilt';
 import ImageWithSpinner from './components/ImageWithSpinner';
 
-// Project data with tech stacks
+const techIcons = {
+    'Python': { icon: 'devicon-python-plain', label: 'Python', color: '#3776AB' },
+    'React': { icon: 'devicon-react-original', label: 'React', color: '#61DAFB' },
+    'D3.js': { icon: 'devicon-d3js-plain', label: 'D3.js', color: '#F9A03C' },
+    'Flask': { icon: 'devicon-flask-original', label: 'Flask', color: '#000000' },
+    'Swift': { icon: 'devicon-swift-plain', label: 'Swift', color: '#FA7343' },
+    'CoreML': { icon: 'devicon-apple-original', label: 'CoreML', color: '#000000' },
+    'C': { icon: 'devicon-c-plain', label: 'C', color: '#A8B9CC' },
+    'C++': { icon: 'devicon-cplusplus-plain', label: 'C++', color: '#00599C' },
+    'PyTorch': { icon: 'devicon-pytorch-original', label: 'PyTorch', color: '#EE4C2C' },
+    'YOLOv5': { icon: 'devicon-opencv-plain', label: 'YOLOv5', color: '#5C3EE8' },
+    'JavaScript': { icon: 'devicon-javascript-plain', label: 'JavaScript', color: '#F7DF1E' },
+    'MongoDB': { icon: 'devicon-mongodb-plain', label: 'MongoDB', color: '#47A248' },
+};
+
 const projects = [
     {
         id: 1,
@@ -57,12 +71,12 @@ function ProjectCard({ project, index }) {
     useEffect(() => {
         if (tiltRef.current) {
             VanillaTilt.init(tiltRef.current, {
-                max: 8,              // Max tilt rotation (degrees)
-                speed: 400,          // Speed of the enter/exit transition
-                glare: true,         // Enable glare effect
-                'max-glare': 0.15,   // Max glare opacity
-                scale: 1.02,         // Scale on hover
-                perspective: 1000,   // Transform perspective
+                max: 8,
+                speed: 400,
+                glare: true,
+                'max-glare': 0.15,
+                scale: 1.02,
+                perspective: 1000,
             });
         }
 
@@ -96,11 +110,23 @@ function ProjectCard({ project, index }) {
                     <span className="code">&#47;&gt;</span>
                 </p>
                 <div className="tech-stack">
-                    {project.tech.map((tech, i) => (
-                        <span key={i} className="tech-badge">
-                            {tech}
-                        </span>
-                    ))}
+                    {project.tech.map((tech, i) => {
+                        const techInfo = techIcons[tech];
+                        return (
+                            <span 
+                                key={i} 
+                                className="tech-icon" 
+                                title={techInfo?.label || tech}
+                                style={{ '--brand-color': techInfo?.color || 'inherit' }}
+                            >
+                                {techInfo ? (
+                                    <i className={techInfo.icon}></i>
+                                ) : (
+                                    <span className="tech-fallback">{tech}</span>
+                                )}
+                            </span>
+                        );
+                    })}
                 </div>
             </div>
         </a>
