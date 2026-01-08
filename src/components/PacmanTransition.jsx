@@ -94,7 +94,7 @@ function PacmanTransition({ isActive, onComplete }) {
       setShowOverlay(false);
       setEatenRows([]);
       setCurrentRow(-1);
-      setPacmanX(-20);
+      setPacmanX(-30);
       setGoingRight(true);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       if (chompRef.current) clearInterval(chompRef.current);
@@ -105,7 +105,7 @@ function PacmanTransition({ isActive, onComplete }) {
     setEatenRows([]);
     setCurrentRow(0);
     setGoingRight(true);
-    setPacmanX(-20);
+    setPacmanX(-30);
 
     chompRef.current = setInterval(() => {
       setMouthOpen(prev => !prev);
@@ -121,8 +121,8 @@ function PacmanTransition({ isActive, onComplete }) {
 
     const startTime = Date.now();
     const duration = ROW_DURATION * 1000;
-    const startX = goingRight ? -20 : 120;
-    const endX = goingRight ? 120 : -20;
+    const startX = goingRight ? -30 : 130;
+    const endX = goingRight ? 130 : -30;
 
     const animate = () => {
       const elapsed = Date.now() - startTime;
@@ -139,7 +139,7 @@ function PacmanTransition({ isActive, onComplete }) {
         if (currentRow < ROWS - 1) {
           const nextGoingRight = !goingRight;
           setGoingRight(nextGoingRight);
-          setPacmanX(nextGoingRight ? -20 : 120);
+          setPacmanX(nextGoingRight ? -30 : 130);
           setCurrentRow(prev => prev + 1);
         } else {
           setTimeout(() => {
@@ -167,12 +167,12 @@ function PacmanTransition({ isActive, onComplete }) {
     if (goingRight) {
       return {
         left: 0,
-        width: `${Math.max(0, Math.min(100, pacmanX + 6))}%`,
+        width: `${Math.max(0, Math.min(100, pacmanX + 12))}%`,
       };
     } else {
       return {
         right: 0,
-        width: `${Math.max(0, Math.min(100, 100 - pacmanX - 18))}%`,
+        width: `${Math.max(0, Math.min(100, 100 - pacmanX - 13))}%`,
       };
     }
   };
@@ -239,7 +239,7 @@ function PacmanTransition({ isActive, onComplete }) {
             >
               {Array.from({ length: 25 }).map((_, i) => {
                 const dotPosition = 3 + (i / 24) * 94;
-                const pacmanMouth = goingRight ? pacmanX + 6 : pacmanX - 6;
+                const pacmanMouth = goingRight ? pacmanX + 22 : pacmanX - 6;
                 const isEaten = goingRight 
                   ? dotPosition < pacmanMouth
                   : dotPosition > pacmanMouth;
