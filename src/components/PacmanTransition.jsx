@@ -1,10 +1,40 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ROWS = 6;
-const ROW_DURATION = 2.5;
+const ROWS = 4;
+const ROW_DURATION = 1.875;
 
 function Pacman({ size, isOpen, facingLeft }) {
+  // Using arc paths to create proper pie-slice Pacman with transparent mouth
+  const mouthAngle = isOpen ? 40 : 10;
+  const angleRad = mouthAngle * (Math.PI / 180);
+  
+  let pathD, eyeCx, eyeCy, eyeHighlightCx, eyeHighlightCy;
+  
+  if (facingLeft) {
+    // Mouth opens to the left
+    const x1 = 50 - 45 * Math.cos(angleRad);
+    const y1 = 50 - 45 * Math.sin(angleRad);
+    const x2 = 50 - 45 * Math.cos(angleRad);
+    const y2 = 50 + 45 * Math.sin(angleRad);
+    pathD = `M 50 50 L ${x1} ${y1} A 45 45 0 1 1 ${x2} ${y2} Z`;
+    eyeCx = 45;
+    eyeCy = 25;
+    eyeHighlightCx = 43;
+    eyeHighlightCy = 23;
+  } else {
+    // Mouth opens to the right
+    const x1 = 50 + 45 * Math.cos(angleRad);
+    const y1 = 50 - 45 * Math.sin(angleRad);
+    const x2 = 50 + 45 * Math.cos(angleRad);
+    const y2 = 50 + 45 * Math.sin(angleRad);
+    pathD = `M 50 50 L ${x1} ${y1} A 45 45 0 1 0 ${x2} ${y2} Z`;
+    eyeCx = 55;
+    eyeCy = 25;
+    eyeHighlightCx = 57;
+    eyeHighlightCy = 23;
+  }
+  
   return (
     <svg 
       width={size} 
@@ -12,29 +42,14 @@ function Pacman({ size, isOpen, facingLeft }) {
       viewBox="0 0 100 100"
       style={{
         filter: 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))',
-        transform: facingLeft ? 'scaleX(-1)' : 'none',
       }}
     >
-      <circle 
-        cx="50" 
-        cy="50" 
-        r="45" 
+      <path
+        d={pathD}
         fill="#FFD700"
       />
-      {isOpen && (
-        <path
-          d="M 50 50 L 100 25 L 100 75 Z"
-          fill="#000"
-        />
-      )}
-      {!isOpen && (
-        <path
-          d="M 50 50 L 100 42 L 100 58 Z"
-          fill="#000"
-        />
-      )}
-      <circle cx="55" cy="25" r="8" fill="#000" />
-      <circle cx="57" cy="23" r="3" fill="#FFF" />
+      <circle cx={eyeCx} cy={eyeCy} r="8" fill="#000" />
+      <circle cx={eyeHighlightCx} cy={eyeHighlightCy} r="3" fill="#FFF" />
     </svg>
   );
 }
@@ -152,12 +167,12 @@ function PacmanTransition({ isActive, onComplete }) {
     if (goingRight) {
       return {
         left: 0,
-        width: `${Math.max(0, Math.min(100, pacmanX + 8))}%`,
+        width: `${Math.max(0, Math.min(100, pacmanX + 6))}%`,
       };
     } else {
       return {
         right: 0,
-        width: `${Math.max(0, Math.min(100, 100 - pacmanX - 8))}%`,
+        width: `${Math.max(0, Math.min(100, 100 - pacmanX - 18))}%`,
       };
     }
   };

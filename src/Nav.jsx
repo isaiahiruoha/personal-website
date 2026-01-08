@@ -100,8 +100,8 @@ function Nav() {
       <ul className="nav-list">
         <li className="nav-item">
           <a 
-            href="#" 
-            onClick={scrollToTop}
+            href="#welcome-section" 
+            onClick={(e) => handleNavClick(e, '#welcome-section')}
             className={activeSection === 'about' ? 'active' : ''}
           >
             <span className="nav-text">About</span>

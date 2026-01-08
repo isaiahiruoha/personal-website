@@ -18,6 +18,9 @@ function TypingText({ text, delay, startDelay = 0 }) {
   const [resetKey, setResetKey] = React.useState(0);
   const textRef = React.useRef(null);
   const canvasRef = React.useRef(null);
+  const fadeTimeoutRef = React.useRef(null);
+  const fadeAnimationRef = React.useRef(null);
+  const eraseHistoryRef = React.useRef([]);
 
   React.useEffect(() => {
     const handleReset = () => {
@@ -26,6 +29,9 @@ function TypingText({ text, delay, startDelay = 0 }) {
       setMaskUrl(null);
       setCanvasReady(false);
       setResetKey(k => k + 1);
+      eraseHistoryRef.current = [];
+      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+      if (fadeAnimationRef.current) cancelAnimationFrame(fadeAnimationRef.current);
     };
 
     window.addEventListener('resetTypingText', handleReset);
@@ -75,6 +81,61 @@ function TypingText({ text, delay, startDelay = 0 }) {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       setMaskUrl(canvas.toDataURL());
       setCanvasReady(true);
+      eraseHistoryRef.current = [];
+    };
+
+    const startFadeBack = () => {
+      if (fadeAnimationRef.current) cancelAnimationFrame(fadeAnimationRef.current);
+      
+      const history = [...eraseHistoryRef.current];
+      if (history.length === 0) return;
+      
+      const totalDuration = 2000; // 2 seconds to restore all
+      const startTime = Date.now();
+      
+      const animateFade = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / totalDuration, 1);
+        
+        // Calculate how many points to restore based on progress
+        const pointsToRestore = Math.floor(progress * history.length);
+        
+        // Reset composite operation and clear canvas to white
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Re-erase only the points that haven't been restored yet
+        if (pointsToRestore < history.length) {
+          ctx.globalCompositeOperation = 'destination-out';
+          for (let i = pointsToRestore; i < history.length; i++) {
+            const point = history[i];
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, 35, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        
+        setMaskUrl(canvas.toDataURL());
+        
+        if (progress < 1) {
+          fadeAnimationRef.current = requestAnimationFrame(animateFade);
+        } else {
+          eraseHistoryRef.current = [];
+          ctx.globalCompositeOperation = 'source-over';
+        }
+      };
+      
+      fadeAnimationRef.current = requestAnimationFrame(animateFade);
+    };
+
+    const scheduleFadeBack = () => {
+      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+      if (fadeAnimationRef.current) cancelAnimationFrame(fadeAnimationRef.current);
+      
+      fadeTimeoutRef.current = setTimeout(() => {
+        startFadeBack();
+      }, 1500);
     };
 
     // Small delay to ensure text is fully rendered
@@ -93,6 +154,10 @@ function TypingText({ text, delay, startDelay = 0 }) {
         ctx.arc(x, y, 35, 0, Math.PI * 2);
         ctx.fill();
         setMaskUrl(canvas.toDataURL());
+        
+        // Store erase position in history
+        eraseHistoryRef.current.push({ x, y });
+        scheduleFadeBack();
       }
     };
 
@@ -101,6 +166,8 @@ function TypingText({ text, delay, startDelay = 0 }) {
     return () => {
       window.removeEventListener('resize', resize);
       document.removeEventListener('mousemove', handleMouseMove);
+      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
+      if (fadeAnimationRef.current) cancelAnimationFrame(fadeAnimationRef.current);
     };
   }, [isComplete, canvasReady]);
 
@@ -152,11 +219,20 @@ function Welcome() {
         <p id="sentence">Computer Engineering Student at Queen's University</p>
         <motion.div 
           className="blob-container"
+          data-lenis-prevent
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ 
+            duration: 0.8, 
+            delay: 0.6,
+            ease: [0.34, 1.56, 0.64, 1]
+          }}
           drag
           dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
           dragElastic={0.8}
           dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
-          whileDrag={{ scale: 1.05, cursor: 'grabbing' }}
+          whileDrag={{ scale: 1.05 }}
+          whileHover={{ cursor: 'grab' }}
           style={{ cursor: 'grab' }}
         >
           <div className="blob-wrapper">
@@ -173,7 +249,7 @@ function Welcome() {
           <div className="blob-shadow"></div>
         </motion.div>
         <TypingText
-          text="I'm Isaiah, a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative trading. As I continue learning, this site will eventually... be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"
+          text="I'm Isaiah, a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative trading. This site will eventually™ be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"
           delay={25}
           startDelay={1500}
         />
