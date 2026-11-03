@@ -81,7 +81,7 @@ function Nav() {
         className={`nav ${isHidden ? 'nav-hidden' : ''}`}
         onFocus={() => setIsHidden(false)}
       >
-        <a id="logo" href="#about" aria-label="Isaiah Iruoha, back to top" onClick={(e) => handleNavClick(e, 'about')}>
+        <a id="logo" href="#about" aria-label="II, Isaiah Iruoha, back to top" onClick={(e) => handleNavClick(e, 'about')}>
           <span className="logo-bracket logo-bracket-left" aria-hidden="true">&lt;</span>
           <span className="logo-text" aria-hidden="true">II</span>
           <span className="logo-bracket logo-bracket-right" aria-hidden="true">/&gt;</span>

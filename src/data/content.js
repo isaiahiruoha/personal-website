@@ -25,6 +25,7 @@ export const workExperience = [
     description: 'Amazon MWAA: shipped in-console CloudWatch monitoring and one-click recommended alarms',
     link: 'https://aws.amazon.com/about-aws/whats-new/2026/09/amazon-mwaa-cloudwatch-monitoring/',
     logo: '/assets/logos/aws.webp',
+    logoSize: [110, 66],
   },
   {
     role: 'Quantitative Trading Analyst',
@@ -34,6 +35,7 @@ export const workExperience = [
     location: 'Toronto, ON',
     description: 'Global Algorithmic Trading: execution algorithms, alpha backtesting and market-data tooling in Python and q',
     logo: '/assets/logos/rbc.webp',
+    logoSize: [50, 66],
   },
   {
     role: 'Software Development Engineering Intern',
@@ -44,6 +46,7 @@ export const workExperience = [
     description: 'Apache Airflow: automated Batch and Lambda executor testing behind a public dashboard',
     link: 'https://aws-mwaa.github.io/',
     logo: '/assets/logos/aws.webp',
+    logoSize: [110, 66],
   },
   {
     role: 'Global Markets Summer Analyst',
@@ -53,6 +56,7 @@ export const workExperience = [
     location: 'Toronto, ON',
     description: 'Rotations across Equity & Credit Derivatives, FX, Diversified Industries and Power & Utilities',
     logo: '/assets/logos/scotiabank.svg',
+    logoSize: [66, 66],
   },
   {
     role: 'Software Engineering Intern',
@@ -62,6 +66,7 @@ export const workExperience = [
     location: 'Toronto, ON',
     description: 'Production observability: dashboards monitoring 12 APIs across 4 environments',
     logo: '/assets/logos/guestlogix.webp',
+    logoSize: [42, 66],
   },
   {
     role: 'Teaching Assistant',
@@ -70,7 +75,8 @@ export const workExperience = [
     date: 'Sep 2023 - Dec 2023',
     location: 'Kingston, ON',
     description: 'Computer programming in C for a class of 800 students',
-    logo: '/assets/logos/queens.svg',
+    logo: '/assets/logos/queens.webp',
+    logoSize: [52, 66],
   },
   {
     role: 'Software Automation Engineering Intern',
@@ -80,6 +86,7 @@ export const workExperience = [
     location: 'Guelph, ON',
     description: 'Robot monitoring interfaces and manufacturing workflow automation',
     logo: '/assets/logos/linamar.webp',
+    logoSize: [74, 66],
   },
 ];
 

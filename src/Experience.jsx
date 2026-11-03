@@ -18,7 +18,7 @@ const INITIALS = {
 const initialsFor = (company) =>
   INITIALS[company] ?? company.split(' ').map((word) => word[0]).slice(0, 3).join('').toUpperCase();
 
-function CompanyLogo({ company, logoUrl }) {
+function CompanyLogo({ company, logoUrl, size }) {
   const [failed, setFailed] = useState(false);
 
   if (failed || !logoUrl) {
@@ -32,6 +32,8 @@ function CompanyLogo({ company, logoUrl }) {
   return (
     <img
       src={logoUrl}
+      width={size?.[0]}
+      height={size?.[1]}
       alt=""
       className="company-logo"
       loading="lazy"
@@ -72,7 +74,7 @@ function WorkTimeline() {
             </div>
             <div className="timeline-company-row">
               <p className="timeline-company">{job.company}</p>
-              <CompanyLogo company={job.company} logoUrl={job.logo} />
+              <CompanyLogo company={job.company} logoUrl={job.logo} size={job.logoSize} />
             </div>
             <Meta date={job.date} location={job.location} />
             <p className="timeline-description">
