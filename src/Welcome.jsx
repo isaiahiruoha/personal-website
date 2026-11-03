@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { motion } from 'motion/react';
 import './App.css';
 
 function LoadingSpinner() {
@@ -11,37 +11,17 @@ function LoadingSpinner() {
 }
 
 function TypingText({ text, delay, startDelay = 0 }) {
-  const [displayText, setDisplayText] = React.useState('');
-  const [isComplete, setIsComplete] = React.useState(false);
-  const [maskUrl, setMaskUrl] = React.useState(null);
-  const [canvasReady, setCanvasReady] = React.useState(false);
-  const [resetKey, setResetKey] = React.useState(0);
-  const textRef = React.useRef(null);
-  const canvasRef = React.useRef(null);
-  const fadeTimeoutRef = React.useRef(null);
-  const fadeAnimationRef = React.useRef(null);
-  const eraseHistoryRef = React.useRef([]);
+  const [displayText, setDisplayText] = useState('');
+  const [isComplete, setIsComplete] = useState(false);
+  const [maskUrl, setMaskUrl] = useState(null);
+  const [canvasReady, setCanvasReady] = useState(false);
+  const textRef = useRef(null);
+  const canvasRef = useRef(null);
+  const fadeTimeoutRef = useRef(null);
+  const fadeAnimationRef = useRef(null);
+  const eraseHistoryRef = useRef([]);
 
-  React.useEffect(() => {
-    const handleReset = () => {
-      setDisplayText('');
-      setIsComplete(false);
-      setMaskUrl(null);
-      setCanvasReady(false);
-      setResetKey(k => k + 1);
-      eraseHistoryRef.current = [];
-      if (fadeTimeoutRef.current) clearTimeout(fadeTimeoutRef.current);
-      if (fadeAnimationRef.current) cancelAnimationFrame(fadeAnimationRef.current);
-    };
-
-    window.addEventListener('resetTypingText', handleReset);
-    return () => window.removeEventListener('resetTypingText', handleReset);
-  }, []);
-
-  React.useEffect(() => {
-    setDisplayText('');
-    setIsComplete(false);
-    
+  useEffect(() => {
     let currentIndex = 0;
     let intervalId;
     
@@ -62,9 +42,9 @@ function TypingText({ text, delay, startDelay = 0 }) {
       clearTimeout(timeoutId);
       clearInterval(intervalId);
     };
-  }, [text, delay, startDelay, resetKey]);
+  }, [text, delay, startDelay]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isComplete) return;
     
     const textEl = textRef.current;
@@ -189,8 +169,8 @@ function TypingText({ text, delay, startDelay = 0 }) {
           ref={canvasRef}
           style={{
             position: 'absolute',
-            top: textRef.current?.offsetTop || 0,
-            left: textRef.current?.offsetLeft || 0,
+            top: 0,
+            left: 0,
             pointerEvents: 'none',
             opacity: 0,
           }}
@@ -202,19 +182,10 @@ function TypingText({ text, delay, startDelay = 0 }) {
 
 function Welcome() {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
-
-  React.useEffect(() => {
-    const handleReset = () => {
-      setAnimKey(k => k + 1);
-    };
-    window.addEventListener('resetTypingText', handleReset);
-    return () => window.removeEventListener('resetTypingText', handleReset);
-  }, []);
 
   return (
     <>
-      <section className="welcome-section" key={animKey}>
+      <section className="welcome-section">
         <h1 id="welcome-section">Isaiah Iruoha</h1>
         <p id="sentence">Computer Engineering Student at Queen's University</p>
         <motion.div 
@@ -238,7 +209,7 @@ function Welcome() {
           <div className="blob-wrapper">
             {!imageLoaded && <LoadingSpinner />}
             <img 
-              src={process.env.PUBLIC_URL + '/assets/profile.png'} 
+              src={'/assets/profile.png'} 
               alt="about" 
               className="blob-image"
               draggable="false"

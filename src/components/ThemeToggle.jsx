@@ -1,8 +1,7 @@
-import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function ThemeToggle() {
-    const [isDark, setIsDark] = React.useState(() => {
+    const [isDark, setIsDark] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
         return savedTheme === 'dark';
     });

@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './App.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
-import ReactGA from 'react-ga4';
 import Experience from './Experience';
 import Nav from './Nav';
 import Welcome from './Welcome';
@@ -12,14 +11,8 @@ import Project from './Project';
 import Contact from './Contact';
 import CustomCursor from './components/CustomCursor';
 
-ReactGA.initialize('G-2YLYZ2F5T2');
-
 function App() {
   const lenisRef = useRef(null);
-
-  useEffect(() => {
-    ReactGA.send({ hitType: 'pageview', page: window.location.pathname });
-  }, []);
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -35,17 +28,19 @@ function App() {
 
     lenisRef.current = lenis;
 
+    let rafId;
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     lenis.on('scroll', () => {
       AOS.refresh();
     });
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);

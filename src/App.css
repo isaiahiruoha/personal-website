@@ -386,7 +386,7 @@ li {
 }
 
 .welcome-section .blob-container {
-  /* Animation handled by framer-motion for drag compatibility */
+  /* Animation handled by motion for drag compatibility */
 }
 
 .welcome-section #blurb {

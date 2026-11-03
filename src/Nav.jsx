@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import ThemeToggle from './components/ThemeToggle';
-import PacmanTransition from './components/PacmanTransition';
 
 function Nav() {
   const [isHidden, setIsHidden] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [pacmanActive, setPacmanActive] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,22 +73,11 @@ function Nav() {
 
   const scrollToTop = (e) => {
     e.preventDefault();
-    if (pacmanActive) return;
-    setPacmanActive(true);
-  };
-  
-  const handlePacmanComplete = () => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    window.dispatchEvent(new CustomEvent('resetTypingText'));
-    setTimeout(() => {
-      setPacmanActive(false);
-    }, 1000);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <>
-      <PacmanTransition isActive={pacmanActive} onComplete={handlePacmanComplete} />
-      
       <nav id="navbar" className={`nav ${isHidden ? 'nav-hidden' : ''}`}>
         <a id="logo" href="/" onClick={scrollToTop}>
           <span className="logo-bracket logo-bracket-left">&lt;</span>

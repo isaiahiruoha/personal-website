@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css'; 
 import VanillaTilt from 'vanilla-tilt';
@@ -69,8 +69,9 @@ function ProjectCard({ project, index }) {
     const tiltRef = useRef(null);
 
     useEffect(() => {
-        if (tiltRef.current) {
-            VanillaTilt.init(tiltRef.current, {
+        const node = tiltRef.current;
+        if (node) {
+            VanillaTilt.init(node, {
                 max: 8,
                 speed: 400,
                 glare: true,
@@ -81,9 +82,7 @@ function ProjectCard({ project, index }) {
         }
 
         return () => {
-            if (tiltRef.current && tiltRef.current.vanillaTilt) {
-                tiltRef.current.vanillaTilt.destroy();
-            }
+            node?.vanillaTilt?.destroy();
         };
     }, []);
 
@@ -99,7 +98,7 @@ function ProjectCard({ project, index }) {
             data-aos-duration="600"
         >
             <ImageWithSpinner
-                src={process.env.PUBLIC_URL + project.image}
+                src={project.image}
                 alt={project.title}
                 className="project-image"
             />

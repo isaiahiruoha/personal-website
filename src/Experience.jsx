@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -27,7 +27,7 @@ function CompanyLogo({ company, logoUrl }) {
   
   return (
     <img 
-      src={process.env.PUBLIC_URL + logoUrl} 
+      src={logoUrl} 
       alt={`${company} logo`}
       className="company-logo"
       onError={() => setImgError(true)}
