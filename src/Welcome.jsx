@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 import './App.css';
+import { profile } from './data/content';
 
 function LoadingSpinner() {
   return (
@@ -186,8 +187,8 @@ function Welcome() {
   return (
     <>
       <section className="welcome-section">
-        <h1 id="welcome-section">Isaiah Iruoha</h1>
-        <p id="sentence">Computer Engineering Student at Queen's University</p>
+        <h1 id="welcome-section">{profile.name}</h1>
+        <p id="sentence">{profile.tagline}</p>
         <motion.div 
           className="blob-container"
           data-lenis-prevent
@@ -208,19 +209,27 @@ function Welcome() {
         >
           <div className="blob-wrapper">
             {!imageLoaded && <LoadingSpinner />}
-            <img 
-              src={'/assets/profile.png'} 
-              alt="about" 
-              className="blob-image"
-              draggable="false"
-              style={{ opacity: imageLoaded ? 1 : 0, userSelect: 'none' }}
-              onLoad={() => setImageLoaded(true)}
-            />
+            <picture>
+              <source type="image/avif" srcSet="/assets/profile-480.avif 480w, /assets/profile-960.avif 960w" sizes="(max-width: 600px) 80vw, 400px" />
+              <source type="image/webp" srcSet="/assets/profile-480.webp 480w, /assets/profile-960.webp 960w" sizes="(max-width: 600px) 80vw, 400px" />
+              <img
+                src="/assets/profile-960.jpg"
+                srcSet="/assets/profile-480.jpg 480w, /assets/profile-960.jpg 960w"
+                sizes="(max-width: 600px) 80vw, 400px"
+                width="960"
+                height="960"
+                alt={`Portrait of ${profile.name}`}
+                className="blob-image"
+                draggable="false"
+                style={{ opacity: imageLoaded ? 1 : 0, userSelect: 'none' }}
+                onLoad={() => setImageLoaded(true)}
+              />
+            </picture>
           </div>
           <div className="blob-shadow"></div>
         </motion.div>
         <TypingText
-          text="I'm Isaiah, a Computer Engineering student at Queen's University with interests in software development, artificial intelligence, and quantitative trading. This site will eventually™ be updated with past and current projects along with my contact information, skills, and resume. Feel free to reach out!"
+          text={profile.bio}
           delay={25}
           startDelay={1500}
         />

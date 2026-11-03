@@ -2,33 +2,7 @@ import './App.css';
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-
-const contactLinks = [
-  {
-    name: 'Instagram',
-    url: 'https://www.instagram.com/isaiahiruoha/',
-    icon: 'fab fa-instagram',
-    className: 'instagram'
-  },
-  {
-    name: 'GitHub',
-    url: 'https://github.com/IsaiahIruoha',
-    icon: 'fab fa-github',
-    className: 'github'
-  },
-  {
-    name: 'Email',
-    url: 'mailto:isaiahiruoha@gmail.com',
-    icon: 'fas fa-envelope',
-    className: 'email'
-  },
-  {
-    name: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/isaiahiruoha/',
-    icon: 'fab fa-linkedin-in',
-    className: 'linkedin'
-  }
-];
+import { contactLinks, profile } from './data/content';
 
 function Contact() {
   useEffect(() => {
@@ -39,14 +13,14 @@ function Contact() {
     <>
       <section id="contact" className="contact-section">
         <a 
-          href="https://drive.google.com/file/d/1n0a8gj1Dlw2YS4qFNtfBll83eLOS51V6/view?usp=sharing" 
+          href={profile.resumeUrl} 
           className="btn-resume" 
           target="_blank"
           rel="noopener noreferrer"
           data-aos="fade-up"
           data-aos-duration="500"
         >
-          Resume PDF<i className="fas fa-chevron-right"></i>
+          Resume PDF<i className="fas fa-chevron-right" aria-hidden="true"></i>
         </a>
         <div className="contact-links">
           {contactLinks.map((link, index) => (
@@ -61,13 +35,13 @@ function Contact() {
               data-aos-delay={(index + 1) * 100}
               data-aos-duration="500"
             >
-              <i className={link.icon}></i>
+              <i className={link.icon} aria-hidden="true"></i>
             </a>
           ))}
         </div>
       </section>
       <footer className="footer">
-        <p>© 2025 Isaiah Iruoha</p>
+        <p>© {new Date().getFullYear()} {profile.name}</p>
       </footer>
     </>
   );

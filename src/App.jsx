@@ -9,6 +9,7 @@ import Nav from './Nav';
 import Welcome from './Welcome';
 import Project from './Project';
 import Contact from './Contact';
+import Skills from './Skills';
 import CustomCursor from './components/CustomCursor';
 
 function App() {
@@ -71,7 +72,8 @@ function App() {
       <Nav />
       <Welcome />
       <Experience />
-      <Project  />
+      <Project />
+      <Skills />
       <Contact />
     </>
   );
