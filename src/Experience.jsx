@@ -1,162 +1,198 @@
-import './App.css';
-import { useState, useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import { useRef, useState } from 'react';
+import { Calendar, MapPin } from 'lucide-react';
 import { education, extracurriculars, workExperience } from './data/content';
 
-const getInitials = (company) => {
-  const specialCases = {
-    'Amazon Web Services': 'AWS',
-    'RBC Capital Markets': 'RBC',
-    "Queen's University": 'QU',
-    'Linamar Corporation': 'LIN',
-  };
-  if (specialCases[company]) return specialCases[company];
-  return company.split(' ').map(w => w[0]).slice(0, 3).join('').toUpperCase();
+const TABS = [
+  { id: 'work', label: 'Work Experience', short: 'Work' },
+  { id: 'education', label: 'Education' },
+  { id: 'extracurriculars', label: 'Extracurriculars' },
+];
+
+const INITIALS = {
+  'Amazon Web Services': 'AWS',
+  'RBC Capital Markets': 'RBC',
+  "Queen's University": 'QU',
+  'Linamar Corporation': 'LIN',
 };
 
+const initialsFor = (company) =>
+  INITIALS[company] ?? company.split(' ').map((word) => word[0]).slice(0, 3).join('').toUpperCase();
+
 function CompanyLogo({ company, logoUrl }) {
-  const [imgError, setImgError] = useState(false);
-  
-  if (imgError || !logoUrl) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed || !logoUrl) {
     return (
-      <div className="company-initials">
-        {getInitials(company)}
-      </div>
+      <span className="company-initials" aria-hidden="true">
+        {initialsFor(company)}
+      </span>
     );
   }
-  
+
   return (
-    <img 
-      src={logoUrl} 
-      alt={`${company} logo`}
+    <img
+      src={logoUrl}
+      alt=""
       className="company-logo"
-      onError={() => setImgError(true)}
+      loading="lazy"
+      decoding="async"
+      onError={() => setFailed(true)}
     />
   );
 }
 
-function Experience() {
-  const [activeTab, setActiveTab] = useState('work');
-  
-  useEffect(() => {
-    AOS.init();
-  }, []);
-
+function Meta({ date, location, grade }) {
   return (
-    <div data-aos="fade-left" data-aos-offset="250" data-aos-duration="500">
-      <section className="experience-section" id="experience">
-        <h2 className="experience-header">Experience</h2>
-        
-        <div className="tab-container">
-          <button 
-            className={`tab-button ${activeTab === 'work' ? 'active' : ''}`}
-            onClick={() => setActiveTab('work')}
-          >
-            Work Experience
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'education' ? 'active' : ''}`}
-            onClick={() => setActiveTab('education')}
-          >
-            Education
-          </button>
-          <button 
-            className={`tab-button ${activeTab === 'extracurriculars' ? 'active' : ''}`}
-            onClick={() => setActiveTab('extracurriculars')}
-          >
-            Extracurriculars
-          </button>
-        </div>
-
-        <div className="tab-content">
-          {activeTab === 'work' && (
-            <div className="timeline">
-              {workExperience.map((job, index) => (
-                <div 
-                  key={`${job.company}-${job.date}`} 
-                  className="timeline-item"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <div className="timeline-header">
-                      <h3 className="timeline-role">{job.role}</h3>
-                      <span className="timeline-type">{job.type}</span>
-                    </div>
-                    <div className="timeline-company-row">
-                      <h4 className="timeline-company">{job.company}</h4>
-                      <CompanyLogo company={job.company} logoUrl={job.logo} />
-                    </div>
-                    <div className="timeline-meta">
-                      <span className="timeline-date">{job.date}</span>
-                      <span className="timeline-location">{job.location}</span>
-                    </div>
-                    <p className="timeline-description">
-                      {job.description}
-                      {job.link && (
-                        <>
-                          {' '}
-                          <a href={job.link} target="_blank" rel="noopener noreferrer" className="timeline-link">
-                            Learn more<span className="visually-hidden"> about {job.company}, {job.date}</span>
-                          </a>
-                        </>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'education' && (
-            <div className="timeline">
-              {education.map((edu, index) => (
-                <div 
-                  key={edu.school} 
-                  className="timeline-item"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="timeline-marker"></div>
-                  <div className="timeline-content">
-                    <h3 className="timeline-role">{edu.school}</h3>
-                    <h4 className="timeline-company">{edu.degree}</h4>
-                    {edu.specialization && (
-                      <p className="timeline-specialization">{edu.specialization}</p>
-                    )}
-                    <div className="timeline-meta">
-                      <span className="timeline-date">{edu.date}</span>
-                      {edu.grade && <span className="timeline-grade">{edu.grade}</span>}
-                    </div>
-                    {edu.activities && (
-                      <p className="timeline-description">{edu.activities}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'extracurriculars' && (
-            <div className="timeline volunteering-grid">
-              {extracurriculars.map((vol, index) => (
-                <div 
-                  key={`${vol.organization}-${vol.role}`} 
-                  className="volunteering-card"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <h3 className="volunteering-role">{vol.role}</h3>
-                  <h4 className="volunteering-org">{vol.organization}</h4>
-                  <span className="volunteering-date">{vol.date}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+    <div className="timeline-meta">
+      <span className="timeline-meta-item">
+        <Calendar size={14} strokeWidth={2} aria-hidden="true" />
+        {date}
+      </span>
+      {location && (
+        <span className="timeline-meta-item">
+          <MapPin size={14} strokeWidth={2} aria-hidden="true" />
+          {location}
+        </span>
+      )}
+      {grade && <span className="timeline-grade">{grade}</span>}
     </div>
   );
 }
 
-export default Experience;
+function WorkTimeline() {
+  return (
+    <ol className="timeline">
+      {workExperience.map((job, index) => (
+        <li key={`${job.company}-${job.date}`} className="timeline-item" style={{ animationDelay: `${index * 0.06}s` }}>
+          <span className="timeline-marker" aria-hidden="true" />
+          <div className="timeline-content">
+            <div className="timeline-header">
+              <h3 className="timeline-role">{job.role}</h3>
+              <span className="timeline-type">{job.type}</span>
+            </div>
+            <div className="timeline-company-row">
+              <p className="timeline-company">{job.company}</p>
+              <CompanyLogo company={job.company} logoUrl={job.logo} />
+            </div>
+            <Meta date={job.date} location={job.location} />
+            <p className="timeline-description">
+              {job.description}
+              {job.link && (
+                <>
+                  {' '}
+                  <a href={job.link} target="_blank" rel="noopener noreferrer" className="timeline-link">
+                    Learn more<span className="visually-hidden"> about {job.company}, {job.date} (opens in a new tab)</span>
+                  </a>
+                </>
+              )}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
 
+function EducationTimeline() {
+  return (
+    <ol className="timeline">
+      {education.map((edu, index) => (
+        <li key={edu.school} className="timeline-item" style={{ animationDelay: `${index * 0.06}s` }}>
+          <span className="timeline-marker" aria-hidden="true" />
+          <div className="timeline-content">
+            <h3 className="timeline-role">{edu.school}</h3>
+            <p className="timeline-company">{edu.degree}</p>
+            {edu.specialization && <p className="timeline-specialization">{edu.specialization}</p>}
+            <Meta date={edu.date} grade={edu.grade} />
+            {edu.activities && <p className="timeline-description">{edu.activities}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+function ExtracurricularGrid() {
+  return (
+    <ul className="extracurricular-grid">
+      {extracurriculars.map((item, index) => (
+        <li
+          key={`${item.organization}-${item.role}`}
+          className="extracurricular-card"
+          style={{ animationDelay: `${index * 0.04}s` }}
+        >
+          <h3 className="extracurricular-role">{item.role}</h3>
+          <p className="extracurricular-org">{item.organization}</p>
+          <p className="extracurricular-date">{item.date}</p>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+const PANELS = { work: WorkTimeline, education: EducationTimeline, extracurriculars: ExtracurricularGrid };
+
+function Experience() {
+  const [activeTab, setActiveTab] = useState('work');
+  const tabRefs = useRef({});
+
+  // WAI-ARIA tabs pattern: arrows, Home and End move between tabs and activate them.
+  const onKeyDown = (event) => {
+    const index = TABS.findIndex((tab) => tab.id === activeTab);
+    const moves = { ArrowRight: index + 1, ArrowLeft: index - 1, Home: 0, End: TABS.length - 1 };
+    if (!(event.key in moves)) return;
+    event.preventDefault();
+    const next = TABS[(moves[event.key] + TABS.length) % TABS.length].id;
+    setActiveTab(next);
+    tabRefs.current[next]?.focus();
+  };
+
+  const Panel = PANELS[activeTab];
+
+  return (
+    <section className="section experience-section" id="experience" aria-labelledby="experience-heading">
+      <h2 className="section-header" id="experience-heading" data-aos="fade-up">
+        Experience
+      </h2>
+
+      <div className="tab-container" role="tablist" aria-label="Experience categories" onKeyDown={onKeyDown}>
+        {TABS.map((tab) => {
+          const selected = tab.id === activeTab;
+          return (
+            <button
+              key={tab.id}
+              ref={(el) => {
+                tabRefs.current[tab.id] = el;
+              }}
+              type="button"
+              role="tab"
+              id={`tab-${tab.id}`}
+              aria-selected={selected}
+              aria-controls={`panel-${tab.id}`}
+              tabIndex={selected ? 0 : -1}
+              className={`tab-button ${selected ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.id)}
+            >
+              {tab.short ? (
+                <>
+                  <span className="tab-label-full">{tab.label}</span>
+                  <span className="tab-label-short" aria-hidden="true">
+                    {tab.short}
+                  </span>
+                </>
+              ) : (
+                tab.label
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="tab-content" role="tabpanel" id={`panel-${activeTab}`} aria-labelledby={`tab-${activeTab}`}>
+        <Panel />
+      </div>
+    </section>
+  );
+}
+
+export default Experience;

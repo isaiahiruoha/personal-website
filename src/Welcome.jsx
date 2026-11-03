@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
-import './App.css';
 import { profile } from './data/content';
 
 function LoadingSpinner() {
@@ -186,8 +185,8 @@ function Welcome() {
 
   return (
     <>
-      <section className="welcome-section">
-        <h1 id="welcome-section">{profile.name}</h1>
+      <section className="welcome-section" id="about" aria-labelledby="hero-name">
+        <h1 id="hero-name">{profile.name}</h1>
         <p id="sentence">{profile.tagline}</p>
         <motion.div 
           className="blob-container"

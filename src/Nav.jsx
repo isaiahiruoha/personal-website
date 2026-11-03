@@ -1,136 +1,111 @@
-import { useState, useEffect } from 'react';
-import './App.css';
+import { useEffect, useRef, useState } from 'react';
 import ThemeToggle from './components/ThemeToggle';
+import { isProgrammaticScroll, scrollToSection } from './lib/scroll';
+
+const SECTIONS = [
+  { id: 'about', label: 'About' },
+  { id: 'experience', label: 'Experience' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'skills', label: 'Skills' },
+  { id: 'contact', label: 'Contact' },
+];
+
+// The section whose top has passed a line a third of the way down the viewport is the active one.
+// At the very bottom of the page the last section wins, since it may be too short to reach that line.
+function currentSection() {
+  const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+  if (atBottom) return SECTIONS[SECTIONS.length - 1].id;
+
+  const line = window.innerHeight / 3;
+  let active = SECTIONS[0].id;
+  for (const { id } of SECTIONS) {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= line) active = id;
+  }
+  return active;
+}
 
 function Nav() {
   const [isHidden, setIsHidden] = useState(false);
   const [activeSection, setActiveSection] = useState('about');
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const navRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > 100) {
-        if (currentScrollY > lastScrollY && currentScrollY > 150) {
-          setIsHidden(true);
-        } else if (currentScrollY < lastScrollY) {
-          setIsHidden(false);
-        }
-      } else {
+    let lastY = window.scrollY;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const delta = y - lastY;
+      const navHasFocus = navRef.current?.contains(document.activeElement);
+
+      if (y < 120 || navHasFocus) {
+        setIsHidden(false);
+      } else if (delta > 4 && !isProgrammaticScroll()) {
+        setIsHidden(true);
+      } else if (delta < -4) {
         setIsHidden(false);
       }
-      
-      setLastScrollY(currentScrollY);
+      if (Math.abs(delta) > 4) lastY = y;
+      setActiveSection(currentSection());
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    const sections = ['welcome-section', 'experience', 'projects', 'contact'];
-    
-    const observerOptions = {
-      root: null,
-      rootMargin: '-20% 0px -60% 0px',
-      threshold: 0,
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
     };
 
-    const observerCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id || entry.target.className;
-          if (id.includes('welcome')) {
-            setActiveSection('about');
-          } else {
-            setActiveSection(entry.target.id);
-          }
-        }
-      });
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    sections.forEach((sectionId) => {
-      const element = document.getElementById(sectionId) || 
-                      document.querySelector(`.${sectionId}`);
-      if (element) {
-        observer.observe(element);
-      }
-    });
-
-    return () => observer.disconnect();
   }, []);
 
-  const handleNavClick = (e, targetId) => {
-    e.preventDefault();
-    const target = document.querySelector(targetId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToTop = (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleNavClick = (event, id) => {
+    event.preventDefault();
+    setIsHidden(false);
+    setActiveSection(id);
+    scrollToSection(id);
   };
 
   return (
-    <>
-      <nav id="navbar" className={`nav ${isHidden ? 'nav-hidden' : ''}`}>
-        <a id="logo" href="/" onClick={scrollToTop}>
-          <span className="logo-bracket logo-bracket-left">&lt;</span>
-          <span className="logo-text">II</span>
-          <span className="logo-bracket logo-bracket-right">/&gt;</span>
+    <header>
+      <nav
+        id="navbar"
+        ref={navRef}
+        aria-label="Primary"
+        className={`nav ${isHidden ? 'nav-hidden' : ''}`}
+        onFocus={() => setIsHidden(false)}
+      >
+        <a id="logo" href="#about" aria-label="Isaiah Iruoha, back to top" onClick={(e) => handleNavClick(e, 'about')}>
+          <span className="logo-bracket logo-bracket-left" aria-hidden="true">&lt;</span>
+          <span className="logo-text" aria-hidden="true">II</span>
+          <span className="logo-bracket logo-bracket-right" aria-hidden="true">/&gt;</span>
         </a>
-      <ul className="nav-list">
-        <li className="nav-item">
-          <a 
-            href="#welcome-section" 
-            onClick={(e) => handleNavClick(e, '#welcome-section')}
-            className={activeSection === 'about' ? 'active' : ''}
-          >
-            <span className="nav-text">About</span>
-            <span className="nav-underline"></span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            href="#experience" 
-            onClick={(e) => handleNavClick(e, '#experience')}
-            className={activeSection === 'experience' ? 'active' : ''}
-          >
-            <span className="nav-text">Experience</span>
-            <span className="nav-underline"></span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            href="#projects" 
-            onClick={(e) => handleNavClick(e, '#projects')}
-            className={activeSection === 'projects' ? 'active' : ''}
-          >
-            <span className="nav-text">Projects</span>
-            <span className="nav-underline"></span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a 
-            href="#contact" 
-            onClick={(e) => handleNavClick(e, '#contact')}
-            className={activeSection === 'contact' ? 'active' : ''}
-          >
-            <span className="nav-text">Contact</span>
-            <span className="nav-underline"></span>
-          </a>
-        </li>
-        <li className="theme-toggle-container">
+        <ul className="nav-list">
+          {SECTIONS.map(({ id, label }) => (
+            <li key={id} className="nav-item">
+              <a
+                href={`#${id}`}
+                onClick={(e) => handleNavClick(e, id)}
+                className={activeSection === id ? 'active' : undefined}
+                aria-current={activeSection === id ? 'location' : undefined}
+              >
+                <span className="nav-text">{label}</span>
+                <span className="nav-underline" aria-hidden="true" />
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div className="nav-actions">
           <ThemeToggle />
-        </li>
-      </ul>
+        </div>
       </nav>
-    </>
+    </header>
   );
 }
 

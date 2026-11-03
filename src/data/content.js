@@ -9,9 +9,9 @@ export const profile = {
 };
 
 export const contactLinks = [
-  { name: 'GitHub', url: 'https://github.com/IsaiahIruoha', icon: 'fab fa-github', className: 'github' },
-  { name: 'Email', url: 'mailto:isaiahiruoha@gmail.com', icon: 'fas fa-envelope', className: 'email' },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/isaiahiruoha/', icon: 'fab fa-linkedin-in', className: 'linkedin' },
+  { name: 'GitHub', url: 'https://github.com/IsaiahIruoha', icon: 'github' },
+  { name: 'Email', url: 'mailto:isaiahiruoha@gmail.com', icon: 'email' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/isaiahiruoha/', icon: 'linkedin' },
 ];
 
 // Titles follow the resume; dates follow LinkedIn.
@@ -24,7 +24,7 @@ export const workExperience = [
     location: 'Toronto, ON',
     description: 'Amazon MWAA: shipped in-console CloudWatch monitoring and one-click recommended alarms',
     link: 'https://aws.amazon.com/about-aws/whats-new/2026/09/amazon-mwaa-cloudwatch-monitoring/',
-    logo: '/assets/logos/aws.png',
+    logo: '/assets/logos/aws.webp',
   },
   {
     role: 'Quantitative Trading Analyst',
@@ -33,7 +33,7 @@ export const workExperience = [
     date: 'Sep 2025 - Jun 2026',
     location: 'Toronto, ON',
     description: 'Global Algorithmic Trading: execution algorithms, alpha backtesting and market-data tooling in Python and q',
-    logo: '/assets/logos/rbc.png',
+    logo: '/assets/logos/rbc.webp',
   },
   {
     role: 'Software Development Engineering Intern',
@@ -43,7 +43,7 @@ export const workExperience = [
     location: 'Vancouver, BC',
     description: 'Apache Airflow: automated Batch and Lambda executor testing behind a public dashboard',
     link: 'https://aws-mwaa.github.io/',
-    logo: '/assets/logos/aws.png',
+    logo: '/assets/logos/aws.webp',
   },
   {
     role: 'Global Markets Summer Analyst',
@@ -61,7 +61,7 @@ export const workExperience = [
     date: 'Apr 2024 - May 2024',
     location: 'Toronto, ON',
     description: 'Production observability: dashboards monitoring 12 APIs across 4 environments',
-    logo: '/assets/logos/guestlogix.png',
+    logo: '/assets/logos/guestlogix.webp',
   },
   {
     role: 'Teaching Assistant',
@@ -79,7 +79,7 @@ export const workExperience = [
     date: 'Summers 2022 & 2023',
     location: 'Guelph, ON',
     description: 'Robot monitoring interfaces and manufacturing workflow automation',
-    logo: '/assets/logos/linamar.png',
+    logo: '/assets/logos/linamar.webp',
   },
 ];
 
@@ -126,53 +126,44 @@ export const skills = [
   { group: 'Cloud & Tools', items: ['AWS (CloudWatch, Lambda, CDK, CloudFormation, EC2, RDS)', 'Docker', 'Git', 'Grafana', 'React', 'Node.js', 'Unix'] },
 ];
 
-export const techIcons = {
-  Python: { icon: 'devicon-python-plain', color: '#3776AB' },
-  Jupyter: { icon: 'devicon-jupyter-plain', color: '#F37626' },
-  pandas: { icon: 'devicon-pandas-plain', color: '#150458' },
-  React: { icon: 'devicon-react-original', color: '#61DAFB' },
-  'D3.js': { icon: 'devicon-d3js-plain', color: '#F9A03C' },
-  Swift: { icon: 'devicon-swift-plain', color: '#FA7343' },
-  CoreML: { icon: 'devicon-apple-original', color: '#000000' },
-  'C++': { icon: 'devicon-cplusplus-plain', color: '#00599C' },
-  Qt: { icon: 'devicon-qt-original', color: '#41CD52' },
-  PyTorch: { icon: 'devicon-pytorch-original', color: '#EE4C2C' },
-  OpenCV: { icon: 'devicon-opencv-plain', color: '#5C3EE8' },
-  Verilog: { icon: 'devicon-verilog-plain', color: '#1A348F' },
-};
-
 export const projects = [
   {
     title: 'Off-Exchange Short Volume',
+    image: '/assets/projects/offexchange.svg',
     link: 'https://github.com/IsaiahIruoha/offexchange-short-volume',
     tech: ['Python', 'pandas', 'Jupyter'],
   },
   {
     title: 'Crypto Arbitrage',
-    image: '/assets/cryptoarbitrage.png',
+    image: '/assets/projects/cryptoarbitrage.webp',
+    imageAvif: '/assets/projects/cryptoarbitrage.avif',
     link: 'https://drive.google.com/file/d/1EHe0314CBGzUaQvjfffCZLVQK2sXhskk/view',
     tech: ['Python', 'PyTorch', 'React', 'D3.js'],
   },
   {
     title: 'ReceiptVault',
-    image: '/assets/receipttracking.png',
+    image: '/assets/projects/receipttracking.webp',
+    imageAvif: '/assets/projects/receipttracking.avif',
     link: 'https://github.com/IsaiahIruoha/receiptvault',
     tech: ['C++', 'Qt', 'Python'],
   },
   {
     title: 'ForeSights',
-    image: '/assets/foresights.png',
+    image: '/assets/projects/foresights.webp',
+    imageAvif: '/assets/projects/foresights.avif',
     link: 'https://github.com/IsaiahIruoha/hack-the-hill-foresights',
     tech: ['Python', 'OpenCV', 'React'],
   },
   {
     title: 'AudioInsights',
-    image: '/assets/mobileapp.png',
+    image: '/assets/projects/mobileapp.webp',
+    imageAvif: '/assets/projects/mobileapp.avif',
     link: 'https://github.com/IsaiahIruoha/music-genre-detector-ios',
     tech: ['Swift', 'CoreML', 'Python'],
   },
   {
     title: 'Simple RISC CPU',
+    image: '/assets/projects/simple-cpu.svg',
     link: 'https://github.com/IsaiahIruoha/simple-cpu',
     tech: ['Verilog'],
   },

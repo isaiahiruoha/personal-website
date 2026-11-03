@@ -35,9 +35,34 @@ describe('App', () => {
   it('lists every extracurricular when its tab is opened', () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Extracurriculars' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Extracurriculars' }));
+    expect(screen.getByRole('tab', { name: 'Extracurriculars' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('Senior Project Manager')).toBeInTheDocument();
     expect(screen.getByText("Queen's Hyperloop Design Team")).toBeInTheDocument();
+  });
+
+  it('moves between experience tabs with the arrow keys', () => {
+    render(<App />);
+
+    const work = screen.getByRole('tab', { name: 'Work Experience' });
+    fireEvent.keyDown(work, { key: 'ArrowRight' });
+    const educationTab = screen.getByRole('tab', { name: 'Education' });
+    expect(educationTab).toHaveAttribute('aria-selected', 'true');
+    expect(educationTab).toHaveFocus();
+    expect(screen.getByRole('tabpanel')).toHaveTextContent('Bachelor of Applied Science');
+
+    fireEvent.keyDown(educationTab, { key: 'End' });
+    expect(screen.getByRole('tab', { name: 'Extracurriculars' })).toHaveFocus();
+  });
+
+  it('has a navigation link for every section', () => {
+    render(<App />);
+
+    const nav = screen.getByRole('navigation', { name: 'Primary' });
+    for (const id of ['experience', 'projects', 'skills', 'contact']) {
+      expect(document.getElementById(id)).not.toBeNull();
+      expect(nav.querySelector(`a[href="#${id}"]`)).not.toBeNull();
+    }
   });
 
   it('features every project as a clean linked card', () => {

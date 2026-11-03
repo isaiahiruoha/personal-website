@@ -1,95 +1,93 @@
 import { useEffect, useRef, useState } from 'react';
-import '../App.css';
+import { prefersReducedMotion } from '../lib/scroll';
+
+const HOVER_TARGETS = 'a, button, [role="tab"], .blob-wrapper';
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
 
 function CustomCursor() {
-  const cursorRef = useRef(null);
+  const [enabled] = useState(() => typeof window !== 'undefined' && window.matchMedia(FINE_POINTER).matches);
+  const blobRef = useRef(null);
   const dotRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) return;
+    if (!enabled) return undefined;
 
-    const cursor = cursorRef.current;
+    const root = document.documentElement;
+    const blob = blobRef.current;
     const dot = dotRef.current;
-    
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
+    // With reduced motion the trailing blob tracks the pointer exactly instead of easing behind it.
+    const ease = prefersReducedMotion() ? 1 : 0.12;
+    let targetX = 0;
+    let targetY = 0;
+    let x = 0;
+    let y = 0;
+    let frame = 0;
+    let seen = false;
 
-    const handleMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      
-      if (dot) {
-        dot.style.left = `${mouseX}px`;
-        dot.style.top = `${mouseY}px`;
+    root.classList.add('has-custom-cursor');
+
+    const place = (el, px, py) => {
+      el.style.transform = `translate3d(${px}px, ${py}px, 0)`;
+    };
+
+    const step = () => {
+      x += (targetX - x) * ease;
+      y += (targetY - y) * ease;
+      place(blob, x, y);
+      frame = Math.abs(targetX - x) + Math.abs(targetY - y) > 0.2 ? requestAnimationFrame(step) : 0;
+    };
+
+    const setVisible = (visible) => {
+      blob.classList.toggle('visible', visible);
+      dot.classList.toggle('visible', visible);
+    };
+
+    const onMove = (event) => {
+      if (event.pointerType && event.pointerType !== 'mouse') return;
+      targetX = event.clientX;
+      targetY = event.clientY;
+      if (!seen) {
+        // Start the blob where the pointer first appears instead of sweeping in from the corner.
+        x = targetX;
+        y = targetY;
+        seen = true;
       }
-      
-      if (!isVisible) setIsVisible(true);
+      place(dot, targetX, targetY);
+      setVisible(true);
+      if (!frame) frame = requestAnimationFrame(step);
     };
 
-    const handleMouseLeave = () => {
-      setIsVisible(false);
+    const onOver = (event) => {
+      const hovering = Boolean(event.target.closest?.(HOVER_TARGETS));
+      blob.classList.toggle('hovering', hovering);
+      dot.classList.toggle('hovering', hovering);
     };
 
-    const handleMouseEnter = () => {
-      setIsVisible(true);
+    const onOut = (event) => {
+      if (!event.relatedTarget) setVisible(false);
     };
 
-    let animationId;
-    const animate = () => {
-      cursorX += (mouseX - cursorX) * 0.1;
-      cursorY += (mouseY - cursorY) * 0.1;
-
-      if (cursor) {
-        cursor.style.left = `${cursorX}px`;
-        cursor.style.top = `${cursorY}px`;
-      }
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    const addHoverListeners = () => {
-      const hoverables = document.querySelectorAll(
-        'a, button, .project, .tab-button, .contact-details, .btn-resume, .theme-toggle, .blob-wrapper'
-      );
-      
-      hoverables.forEach((el) => {
-        el.addEventListener('mouseenter', () => setIsHovering(true));
-        el.addEventListener('mouseleave', () => setIsHovering(false));
-      });
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseleave', handleMouseLeave);
-    document.addEventListener('mouseenter', handleMouseEnter);
-    
-    animate();
-    
-    const timeoutId = setTimeout(addHoverListeners, 100);
+    document.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('pointerover', onOver, { passive: true });
+    document.addEventListener('pointerout', onOut, { passive: true });
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      document.removeEventListener('mouseenter', handleMouseEnter);
-      cancelAnimationFrame(animationId);
-      clearTimeout(timeoutId);
+      cancelAnimationFrame(frame);
+      root.classList.remove('has-custom-cursor');
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerover', onOver);
+      document.removeEventListener('pointerout', onOut);
     };
-  }, [isVisible]);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <>
-      <div
-        ref={cursorRef}
-        className={`custom-cursor ${isVisible ? 'visible' : ''} ${isHovering ? 'hovering' : ''}`}
-      />
-      <div
-        ref={dotRef}
-        className={`cursor-dot ${isVisible ? 'visible' : ''} ${isHovering ? 'hovering' : ''}`}
-      />
+      <div ref={blobRef} className="custom-cursor" aria-hidden="true">
+        <div className="custom-cursor-blob" />
+      </div>
+      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
     </>
   );
 }
