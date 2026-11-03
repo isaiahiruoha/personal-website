@@ -127,12 +127,6 @@ export const extracurriculars = [
   { role: 'Software Developer', organization: "Queen's Hyperloop Design Team", date: 'Jan 2023 - Apr 2023' },
 ];
 
-export const skills = [
-  { group: 'Languages', items: ['Python', 'C/C++', 'kdb+/q', 'JavaScript/TypeScript', 'SQL', 'Java', 'Bash', 'Verilog'] },
-  { group: 'Data & ML', items: ['Polars', 'pandas', 'NumPy', 'scikit-learn', 'PyTorch', 'Matplotlib'] },
-  { group: 'Cloud & Tools', items: ['AWS (CloudWatch, Lambda, CDK, CloudFormation, EC2, RDS)', 'Docker', 'Git', 'Grafana', 'React', 'Node.js', 'Unix'] },
-];
-
 export const projects = [
   {
     title: 'Off-Exchange Short Volume',

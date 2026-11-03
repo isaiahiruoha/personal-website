@@ -10,7 +10,7 @@ describe('App', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Isaiah Iruoha' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Experience' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Skills' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Skills' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: /resume/i })).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe('App', () => {
     render(<App />);
 
     const nav = screen.getByRole('navigation', { name: 'Primary' });
-    for (const id of ['experience', 'projects', 'skills', 'contact']) {
+    for (const id of ['experience', 'projects', 'contact']) {
       expect(document.getElementById(id)).not.toBeNull();
       expect(nav.querySelector(`a[href="#${id}"]`)).not.toBeNull();
     }

@@ -8,7 +8,6 @@ import Nav from './Nav';
 import Welcome from './Welcome';
 import Experience from './Experience';
 import Project from './Project';
-import Skills from './Skills';
 import Contact from './Contact';
 import CustomCursor from './components/CustomCursor';
 import { prefersReducedMotion, setLenis } from './lib/scroll';
@@ -67,7 +66,6 @@ function App() {
         <Welcome />
         <Experience />
         <Project />
-        <Skills />
         <Contact />
       </main>
       <footer className="footer">

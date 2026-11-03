@@ -1018,44 +1018,6 @@ button {
 }
 
 /* ==========================================================================
-   Skills
-   ========================================================================== */
-
-.skills-groups {
-  display: grid;
-  gap: 2.8rem;
-  width: 100%;
-  max-width: var(--content-narrow);
-}
-
-.skills-group-title {
-  margin-bottom: 1.2rem;
-  font-size: 1.8rem;
-  font-weight: 650;
-}
-
-.skills-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.skills-chip {
-  padding: 0.6rem 1.4rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  font-size: 1.4rem;
-  transition: border-color 0.2s ease, transform 0.2s ease;
-}
-
-.skills-chip:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-}
-
-/* ==========================================================================
    Contact and footer
    ========================================================================== */
 
