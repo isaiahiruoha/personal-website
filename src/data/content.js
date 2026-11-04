@@ -4,7 +4,7 @@ export const profile = {
   name: 'Isaiah Iruoha',
   tagline: 'Software Engineer & Quantitative Developer',
   subtitle: "Computer Engineering at Queen's University, Class of 2027",
-  bio: "I'm a final-year Computer Engineering student at Queen's University focused on quantitative development. I've built execution algorithms and market-data tooling on RBC's Global Algorithmic Trading desk, shipped Amazon MWAA monitoring at AWS, and contributed to Apache Airflow. Feel free to reach out!",
+  bio: "I'm a final-year Computer Engineering student at Queen's University and a formerly licensed equity trader, focused on quantitative development and distributed systems. I've built execution algorithms and market-data tooling on RBC's Global Algorithmic Trading desk, shipped Amazon MWAA monitoring at AWS, and contributed to Apache Airflow. Feel free to reach out!",
   resumeUrl: 'https://drive.google.com/file/d/1n0a8gj1Dlw2YS4qFNtfBll83eLOS51V6/view?usp=sharing',
 };
 
