@@ -80,7 +80,14 @@ function Nav() {
         className={`nav ${isHidden ? 'nav-hidden' : ''}`}
         onFocus={() => setIsHidden(false)}
       >
-        <a id="logo" href="#about" aria-label="II, Isaiah Iruoha, back to top" onClick={(e) => handleNavClick(e, 'about')}>
+        <a
+          id="logo"
+          href="#about"
+          aria-label="II, Isaiah Iruoha, back to top"
+          data-event="nav_click"
+          data-event-section="logo"
+          onClick={(e) => handleNavClick(e, 'about')}
+        >
           <span className="logo-bracket logo-bracket-left" aria-hidden="true">&lt;</span>
           <span className="logo-text" aria-hidden="true">II</span>
           <span className="logo-bracket logo-bracket-right" aria-hidden="true">/&gt;</span>
@@ -90,6 +97,8 @@ function Nav() {
             <li key={id} className="nav-item">
               <a
                 href={`#${id}`}
+                data-event="nav_click"
+                data-event-section={id}
                 onClick={(e) => handleNavClick(e, id)}
                 className={activeSection === id ? 'active' : undefined}
                 aria-current={activeSection === id ? 'location' : undefined}

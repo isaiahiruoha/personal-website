@@ -43,7 +43,15 @@ function ProjectCard({ project, index }) {
 
   return (
     <li className="project-item" data-aos="fade-up" data-aos-delay={index * 80}>
-      <a ref={tiltRef} href={project.link} target="_blank" rel="noopener noreferrer" className="project">
+      <a
+        ref={tiltRef}
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="project"
+        data-event="project_click"
+        data-event-project={project.title}
+      >
         <ProjectImage project={project} />
         <div className="project-info">
           <h3 className="project-title">

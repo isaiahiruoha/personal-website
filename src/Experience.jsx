@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Calendar, MapPin } from 'lucide-react';
 import { education, extracurriculars, workExperience } from './data/content';
+import { track } from './lib/analytics';
 
 const TABS = [
   { id: 'work', label: 'Work Experience', short: 'Work' },
@@ -82,7 +83,14 @@ function WorkTimeline() {
               {job.link && (
                 <>
                   {' '}
-                  <a href={job.link} target="_blank" rel="noopener noreferrer" className="timeline-link">
+                  <a
+                    href={job.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="timeline-link"
+                    data-event="experience_link_click"
+                    data-event-company={`${job.company} (${job.date})`}
+                  >
                     Learn more<span className="visually-hidden"> about {job.company}, {job.date} (opens in a new tab)</span>
                   </a>
                 </>
@@ -138,6 +146,12 @@ function Experience() {
   const [activeTab, setActiveTab] = useState('work');
   const tabRefs = useRef({});
 
+  const selectTab = (id) => {
+    if (id === activeTab) return;
+    setActiveTab(id);
+    track('experience_tab', { tab: id });
+  };
+
   // WAI-ARIA tabs pattern: arrows, Home and End move between tabs and activate them.
   const onKeyDown = (event) => {
     const index = TABS.findIndex((tab) => tab.id === activeTab);
@@ -145,7 +159,7 @@ function Experience() {
     if (!(event.key in moves)) return;
     event.preventDefault();
     const next = TABS[(moves[event.key] + TABS.length) % TABS.length].id;
-    setActiveTab(next);
+    selectTab(next);
     tabRefs.current[next]?.focus();
   };
 
@@ -173,7 +187,7 @@ function Experience() {
               aria-controls={`panel-${tab.id}`}
               tabIndex={selected ? 0 : -1}
               className={`tab-button ${selected ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => selectTab(tab.id)}
             >
               {tab.short ? (
                 <>

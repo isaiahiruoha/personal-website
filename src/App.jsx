@@ -11,9 +11,19 @@ import Project from './Project';
 import Contact from './Contact';
 import CustomCursor from './components/CustomCursor';
 import { prefersReducedMotion, setLenis } from './lib/scroll';
+import { installClickTracking, installSectionTracking } from './lib/analytics';
 import { profile } from './data/content';
 
 function App() {
+  useEffect(() => {
+    const stopClicks = installClickTracking();
+    const stopSections = installSectionTracking(['experience', 'projects', 'contact']);
+    return () => {
+      stopClicks();
+      stopSections();
+    };
+  }, []);
+
   // App is the single owner of smooth scrolling and scroll-reveal animations.
   useEffect(() => {
     const reduced = prefersReducedMotion();

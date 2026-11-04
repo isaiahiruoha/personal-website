@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Moon, Sun } from 'lucide-react';
+import { track } from '../lib/analytics';
 
 const STORAGE_KEY = 'theme';
 
@@ -50,6 +51,7 @@ function ThemeToggle() {
     const next = theme === 'dark' ? 'light' : 'dark';
     applyTheme(next, { persist: true, animate: true });
     setTheme(next);
+    track('theme_change', { theme: next });
   };
 
   const isDark = theme === 'dark';

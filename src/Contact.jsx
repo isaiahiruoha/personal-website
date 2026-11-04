@@ -11,6 +11,7 @@ function Contact() {
       <a
         href={profile.resumeUrl}
         className="btn-resume"
+        data-event="resume_click"
         target="_blank"
         rel="noopener noreferrer"
         data-aos="fade-up"
@@ -27,6 +28,8 @@ function Contact() {
               target={link.url.startsWith('mailto:') ? undefined : '_blank'}
               rel="noopener noreferrer"
               className={`contact-icon contact-icon-${link.icon}`}
+              data-event="contact_click"
+              data-event-method={link.icon}
               aria-label={link.name}
             >
               <ContactIcon name={link.icon} />

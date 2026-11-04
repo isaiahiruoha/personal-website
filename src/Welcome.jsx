@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { LazyMotion, m } from 'motion/react';
 import { profile } from './data/content';
 import { prefersReducedMotion } from './lib/scroll';
+import { trackOnce } from './lib/analytics';
 
 const ERASE_RADIUS = 35;
 const ERASE_MARGIN = 40;
@@ -102,6 +103,7 @@ function TypingText({ text, delay, startDelay = 0 }) {
       window.clearTimeout(restoreTimer);
       points.push({ x, y });
       draw(points);
+      trackOnce('bio_erase');
       restoreTimer = window.setTimeout(restore, RESTORE_DELAY_MS);
     };
 
@@ -156,6 +158,7 @@ function Welcome() {
           dragElastic={0.8}
           dragTransition={{ bounceStiffness: 300, bounceDamping: 15 }}
           whileDrag={{ scale: 1.05, cursor: 'grabbing' }}
+        onDragStart={() => trackOnce('portrait_drag')}
           style={{ cursor: 'grab' }}
         >
           <div className="blob-wrapper">
