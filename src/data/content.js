@@ -114,6 +114,7 @@ export const education = [
 
 // Current roles first, then by end date, most recent first.
 export const extracurriculars = [
+  { role: 'Head of Risk', organization: "Queen's University Investment Counsel (QUIC)", date: '2026 - Present' },
   { role: 'Senior Project Manager', organization: 'CREO Solutions', date: 'Mar 2024 - Present' },
   { role: 'Member', organization: 'ColorStack', date: 'Aug 2025 - Present' },
   { role: 'Open-Source Contributor', organization: 'Apache Airflow', date: 'Jun 2025 - Sep 2026' },

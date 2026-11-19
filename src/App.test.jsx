@@ -38,6 +38,8 @@ describe('App', () => {
     fireEvent.click(screen.getByRole('tab', { name: 'Extracurriculars' }));
     expect(screen.getByRole('tab', { name: 'Extracurriculars' })).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByText('Senior Project Manager')).toBeInTheDocument();
+    expect(screen.getByText('Head of Risk')).toBeInTheDocument();
+    expect(screen.getByText("Queen's University Investment Counsel (QUIC)")).toBeInTheDocument();
     expect(screen.getByText("Queen's Hyperloop Design Team")).toBeInTheDocument();
   });
 
